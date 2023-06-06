@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/jwtauth/v5"
 	_ "github.com/lib/pq"
 	"github.com/petrostrak/xm-companies/internal/adapters/handlers"
 	"github.com/petrostrak/xm-companies/internal/adapters/repository"
@@ -18,6 +19,7 @@ import (
 var (
 	companyService *services.CompanyService
 	companyHandler *handlers.CompanyHandler
+	tokenAuth      *jwtauth.JWTAuth
 )
 
 func main() {
@@ -26,6 +28,7 @@ func main() {
 	store := repository.NewPostgresRepository()
 	companyService = services.NewCompanyService(store.CompanyRepository)
 	companyHandler = handlers.NewCompanyHandler(*companyService)
+	tokenAuth = jwtauth.New("HS256", []byte("xm-companies"), nil)
 
 	srv := &http.Server{
 		Addr:        fmt.Sprintf(":%d", 8080),
@@ -48,11 +51,15 @@ func Routes() http.Handler {
 	r.Use(middleware.Recoverer)
 
 	r.Route("/companies", func(r chi.Router) {
-		r.Post("/", companyHandler.CreateCompany)
-		// r.Use(handlers.Auth)
 		r.Get("/{id}", companyHandler.GetCompany)
-		r.Patch("/{id}", companyHandler.UpdateCompany)
-		r.Delete("/{id}", companyHandler.DeleteCompany)
+
+		r.Group(func(r chi.Router) {
+			r.Use(jwtauth.Verifier(tokenAuth))
+			r.Use(jwtauth.Authenticator)
+			r.Post("/", companyHandler.CreateCompany)
+			r.Patch("/{id}", companyHandler.UpdateCompany)
+			r.Delete("/{id}", companyHandler.DeleteCompany)
+		})
 	})
 
 	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
