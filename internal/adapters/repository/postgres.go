@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -19,16 +20,17 @@ type PostgresRepository struct {
 	*CompanyRepository
 }
 
+var dsn = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
+
 func NewPostgresRepository() *PostgresRepository {
-	var (
-		host     = "localhost"
-		user     = "postgres"
-		password = "password"
-		dbName   = "xm_companies"
-		port     = "5432"
-		dsn      = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
-	)
-	db, err := sql.Open("postgres", fmt.Sprintf(dsn, host, port, user, password, dbName))
+
+	db, err := sql.Open("postgres", fmt.Sprintf(dsn,
+		os.Getenv("POSTGRES_HOST"),
+		os.Getenv("POSTGRES_PORT"),
+		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_DB_NAME"),
+	))
 	if err != nil {
 		return nil
 	}

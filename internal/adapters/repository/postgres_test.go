@@ -16,15 +16,6 @@ import (
 )
 
 var (
-	host     = "localhost"
-	user     = "postgres"
-	password = "password"
-	dbName   = "agile_transfer_test"
-	port     = "5435"
-	dsn      = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
-)
-
-var (
 	resource *dockertest.Resource
 	pool     *dockertest.Pool
 	testDB   *sql.DB
@@ -43,14 +34,14 @@ func TestMain(m *testing.M) {
 		Repository: "postgres",
 		Tag:        "14.5",
 		Env: []string{
-			"POSTGRES_USER=" + user,
-			"POSTGRES_PASSWORD=" + password,
-			"POSTGRES_DB=" + dbName,
+			"POSTGRES_USER=postgres",
+			"POSTGRES_PASSWORD=password",
+			"POSTGRES_DB=xm_companies_test",
 		},
 		ExposedPorts: []string{"5432"},
 		PortBindings: map[docker.Port][]docker.PortBinding{
 			"5432": {
-				{HostIP: "0.0.0.0", HostPort: port},
+				{HostIP: "0.0.0.0", HostPort: "5435"},
 			},
 		},
 	}
@@ -63,7 +54,7 @@ func TestMain(m *testing.M) {
 
 	if err := pool.Retry(func() error {
 		var err error
-		testDB, err = sql.Open("postgres", fmt.Sprintf(dsn, host, port, user, password, dbName))
+		testDB, err = sql.Open("postgres", "host=localhost port=5435 user=postgres password=password dbname=xm_companies_test sslmode=disable timezone=UTC connect_timeout=5")
 		if err != nil {
 			log.Println("error:", err)
 			return err

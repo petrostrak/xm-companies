@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/petrostrak/xm-companies/internal/adapters/handlers"
 	"github.com/petrostrak/xm-companies/internal/adapters/repository"
@@ -25,13 +26,18 @@ var (
 func main() {
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
+	err := godotenv.Load()
+	if err != nil {
+		logger.Fatal(err)
+	}
+
 	store := repository.NewPostgresRepository()
 	companyService = services.NewCompanyService(store.CompanyRepository)
 	companyHandler = handlers.NewCompanyHandler(*companyService)
 	tokenAuth = jwtauth.New("HS256", []byte("xm-companies"), nil)
 
 	srv := &http.Server{
-		Addr:        fmt.Sprintf(":%d", 8080),
+		Addr:        os.Getenv("SERVER_ADDRESS"),
 		Handler:     Routes(),
 		IdleTimeout: time.Minute,
 		ReadTimeout: 10 * time.Second,
