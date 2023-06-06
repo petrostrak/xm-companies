@@ -147,7 +147,7 @@ func Test_PostgresDBRepoCreateCompany(t *testing.T) {
 
 	err := testRepo.CompanyRepository.Create(&testCompany)
 	if err != nil {
-		t.Errorf("insert account returned an error: %s", err)
+		t.Errorf("insert company returned an error: %s", err)
 	}
 }
 
@@ -158,7 +158,7 @@ func Test_PostgresDBRepoUpdateCompany(t *testing.T) {
 
 	err := testRepo.CompanyRepository.Update(company)
 	if err != nil {
-		t.Errorf("error updating account: %s", err)
+		t.Errorf("error updating company: %s", err)
 	}
 
 	company, _ = testRepo.CompanyRepository.Get(testCompanyID)
