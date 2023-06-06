@@ -1,8 +1,10 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/petrostrak/xm-companies/internal/core/domain"
@@ -15,6 +17,35 @@ var (
 
 type PostgresRepository struct {
 	*CompanyRepository
+}
+
+func NewPostgresRepository() *PostgresRepository {
+	dsn := POSTGRES_DSN
+	db, err := sql.Open("postgres", dsn)
+	if err != nil {
+		return nil
+	}
+
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+
+	duration, err := time.ParseDuration("15m")
+	if err != nil {
+		return nil
+	}
+	db.SetConnMaxIdleTime(duration)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	err = db.PingContext(ctx)
+	if err != nil {
+		return nil
+	}
+
+	return &PostgresRepository{
+		&CompanyRepository{db},
+	}
 }
 
 type CompanyRepository struct {
