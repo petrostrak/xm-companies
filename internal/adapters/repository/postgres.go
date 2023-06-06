@@ -13,12 +13,6 @@ import (
 
 var (
 	ErrRecordNotFound = errors.New("record not Found")
-	host              = "localhost"
-	user              = "postgres"
-	password          = "password"
-	dbName            = "xm_companies"
-	port              = "5432"
-	dsn               = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
 )
 
 type PostgresRepository struct {
@@ -26,6 +20,14 @@ type PostgresRepository struct {
 }
 
 func NewPostgresRepository() *PostgresRepository {
+	var (
+		host     = "localhost"
+		user     = "postgres"
+		password = "password"
+		dbName   = "xm_companies"
+		port     = "5432"
+		dsn      = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
+	)
 	db, err := sql.Open("postgres", fmt.Sprintf(dsn, host, port, user, password, dbName))
 	if err != nil {
 		return nil
