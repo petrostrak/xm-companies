@@ -26,12 +26,7 @@ func (a *CompanyHandler) CreateCompany(w http.ResponseWriter, r *http.Request) {
 		Description       string `json:"description"`
 		NumberOfEmployees int    `json:"number_of_employees"`
 		Registered        bool   `json:"registered"`
-		Type              struct {
-			Corporation        string `json:"corporation"`
-			NonProfit          string `json:"non_profit"`
-			Cooperative        string `json:"cooperative"`
-			SoleProprietorship string `json:"sole_proprietorship"`
-		} `json:"type"`
+		Type              string `json:"type"`
 	}
 
 	err := utils.ReadJSON(w, r, &input)
@@ -82,12 +77,7 @@ func (a *CompanyHandler) GetCompany(w http.ResponseWriter, r *http.Request) {
 		Description       string    `json:"description"`
 		NumberOfEmployees int       `json:"number_of_employees"`
 		Registered        bool      `json:"registered"`
-		Type              struct {
-			Corporation        string `json:"corporation"`
-			NonProfit          string `json:"non_profit"`
-			Cooperative        string `json:"cooperative"`
-			SoleProprietorship string `json:"sole_proprietorship"`
-		} `json:"type"`
+		Type              string    `json:"type"`
 	}
 	comp.ID = company.ID
 	comp.Name = company.Name
@@ -121,12 +111,7 @@ func (a *CompanyHandler) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 		Description       *string `json:"description"`
 		NumberOfEmployees *int    `json:"number_of_employees"`
 		Registered        *bool   `json:"registered"`
-		Type              *struct {
-			Corporation        string `json:"corporation"`
-			NonProfit          string `json:"non_profit"`
-			Cooperative        string `json:"cooperative"`
-			SoleProprietorship string `json:"sole_proprietorship"`
-		} `json:"type"`
+		Type              *string `json:"type"`
 	}
 
 	err = utils.ReadJSON(w, r, &input)

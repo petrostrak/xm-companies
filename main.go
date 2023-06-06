@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	_ "github.com/lib/pq"
 	"github.com/petrostrak/xm-companies/internal/adapters/handlers"
 	"github.com/petrostrak/xm-companies/internal/adapters/repository"
 	"github.com/petrostrak/xm-companies/internal/core/services"
@@ -48,6 +49,7 @@ func Routes() http.Handler {
 
 	r.Route("/companies", func(r chi.Router) {
 		r.Post("/", companyHandler.CreateCompany)
+		// r.Use(handlers.Auth)
 		r.Get("/{id}", companyHandler.GetCompany)
 		r.Patch("/{id}", companyHandler.UpdateCompany)
 		r.Delete("/{id}", companyHandler.DeleteCompany)

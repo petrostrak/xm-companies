@@ -10,12 +10,5 @@ type Company struct {
 	Description       string    `json:"description"`
 	NumberOfEmployees int       `json:"number_of_employees"`
 	Registered        bool      `json:"registered"`
-	Type              Type      `json:"type"`
-}
-
-type Type struct {
-	Corporation        string `json:"corporation"`
-	NonProfit          string `json:"non_profit"`
-	Cooperative        string `json:"cooperative"`
-	SoleProprietorship string `json:"sole_proprietorship"`
+	Type              string    `json:"type"`
 }
