@@ -2,8 +2,8 @@ package services
 
 import (
 	"github.com/google/uuid"
-	"github.com/petrostrak/xm-companies/core/domain"
-	"github.com/petrostrak/xm-companies/core/ports"
+	"github.com/petrostrak/xm-companies/internal/core/domain"
+	"github.com/petrostrak/xm-companies/internal/core/ports"
 )
 
 type CompanyService struct {
