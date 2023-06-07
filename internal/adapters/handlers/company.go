@@ -6,10 +6,15 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/petrostrak/xm-companies/internal/adapters/kafka/producer"
 	"github.com/petrostrak/xm-companies/internal/adapters/repository"
 	"github.com/petrostrak/xm-companies/internal/core/domain"
 	"github.com/petrostrak/xm-companies/internal/core/services"
 	"github.com/petrostrak/xm-companies/utils"
+)
+
+const (
+	URL = "http://localhost:8082/topics/%s/partitions/%d"
 )
 
 type CompanyHandler struct {
@@ -50,6 +55,11 @@ func (a *CompanyHandler) CreateCompany(w http.ResponseWriter, r *http.Request) {
 
 	headers := make(http.Header)
 	headers.Set("Location", fmt.Sprintf("/companies/%d", company.ID))
+
+	err = producer.ProduceCompany(company, http.MethodPost)
+	if err != nil {
+		utils.ServerErrorResponse(w, r, err)
+	}
 
 	err = utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"Company": company}, headers)
 	if err != nil {
@@ -140,6 +150,11 @@ func (a *CompanyHandler) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = producer.ProduceCompany(company, http.MethodPatch)
+	if err != nil {
+		utils.ServerErrorResponse(w, r, err)
+	}
+
 	err = utils.WriteJSON(w, http.StatusOK, utils.Envelope{"Company": company}, nil)
 	if err != nil {
 		utils.ServerErrorResponse(w, r, err)
@@ -158,6 +173,14 @@ func (a *CompanyHandler) DeleteCompany(w http.ResponseWriter, r *http.Request) {
 			utils.ServerErrorResponse(w, r, err)
 		}
 		return
+	}
+
+	var company domain.Company
+	company.ID = id
+
+	err = producer.ProduceCompany(&company, http.MethodDelete)
+	if err != nil {
+		utils.ServerErrorResponse(w, r, err)
 	}
 
 	err = utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "Company successfully deleted"}, nil)

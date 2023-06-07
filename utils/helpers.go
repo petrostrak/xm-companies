@@ -57,7 +57,3 @@ func ReadJSON(w http.ResponseWriter, r *http.Request, data any) error {
 
 	return nil
 }
-
-func IsAuthenticated(r *http.Request) bool {
-	return false
-}
