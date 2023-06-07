@@ -132,7 +132,7 @@ func Test_Handlers(t *testing.T) {
 				"name": "Petros Inc.",
 				"number_of_employees": 50,
 				"registered": false,
-				"type": "Sole Proprietorship"
+				"type": 3
 			  }`,
 			"",
 			companyHandler.CreateCompany,
@@ -148,7 +148,7 @@ func Test_Handlers(t *testing.T) {
 				"description": "A short desc of my company",
 				"number_of_employees": 5,
 				"registered": true,
-				"type": "non profit"
+				"type": 1
 			  }`,
 			"0e6c0248-a659-41d0-b860-795df3a53f44",
 			companyHandler.UpdateCompany,
@@ -162,7 +162,7 @@ func Test_Handlers(t *testing.T) {
 				"description": "A short desc of my company",
 				"number_of_employees": 5,
 				"registered": true,
-				"type": "non profit"
+				"type": 1
 			  }`,
 			"0e6c0248-a659-41d0-b860-795df3a53f44",
 			companyHandler.UpdateCompany,

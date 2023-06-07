@@ -31,7 +31,7 @@ func (a *CompanyHandler) CreateCompany(w http.ResponseWriter, r *http.Request) {
 		Description       string `json:"description"`
 		NumberOfEmployees int    `json:"number_of_employees"`
 		Registered        bool   `json:"registered"`
-		Type              string `json:"type"`
+		Type              int64  `json:"type"`
 	}
 
 	err := utils.ReadJSON(w, r, &input)
@@ -44,7 +44,7 @@ func (a *CompanyHandler) CreateCompany(w http.ResponseWriter, r *http.Request) {
 		Description:       input.Description,
 		NumberOfEmployees: input.NumberOfEmployees,
 		Registered:        input.Registered,
-		Type:              domain.FromString(input.Type),
+		Type:              domain.CompanyType(input.Type),
 	}
 
 	err = a.service.Create(company)
@@ -121,7 +121,7 @@ func (a *CompanyHandler) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 		Description       *string `json:"description"`
 		NumberOfEmployees *int    `json:"number_of_employees"`
 		Registered        *bool   `json:"registered"`
-		Type              *string `json:"type"`
+		Type              *int64  `json:"type"`
 	}
 
 	err = utils.ReadJSON(w, r, &input)
@@ -141,7 +141,7 @@ func (a *CompanyHandler) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 		company.Registered = *input.Registered
 	}
 	if input.Type != nil {
-		company.Type = domain.FromString(*input.Type)
+		company.Type = domain.CompanyType(*input.Type)
 	}
 
 	err = a.service.Update(company)

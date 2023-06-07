@@ -1,8 +1,6 @@
 package domain
 
 import (
-	"strings"
-
 	"github.com/google/uuid"
 )
 
@@ -35,20 +33,5 @@ func (c CompanyType) ToString() string {
 		return "Cooperative"
 	default:
 		return "Sole Proprietorship"
-	}
-}
-
-func FromString(s string) CompanyType {
-	switch strings.ToLower(s) {
-	case "corporations":
-		return Corporations
-	case "non profit":
-		return NonProfit
-	case "cooperative":
-		return Cooperative
-	case "sole proprietorship":
-		return SoleProprietorship
-	default:
-		return Unknown
 	}
 }
