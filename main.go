@@ -21,10 +21,10 @@ var (
 	companyService *services.CompanyService
 	companyHandler *handlers.CompanyHandler
 	tokenAuth      *jwtauth.JWTAuth
+	logger         = log.New(os.Stdout, "", log.Ldate|log.Ltime)
 )
 
 func main() {
-	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
 	err := godotenv.Load()
 	if err != nil {
@@ -68,10 +68,13 @@ func Routes() http.Handler {
 		})
 	})
 
-	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
+	err := chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		fmt.Printf("[%s]: '%s' has %d middlewares\n", method, route, len(middlewares))
 		return nil
 	})
+	if err != nil {
+		logger.Println(err)
+	}
 
 	return r
 }

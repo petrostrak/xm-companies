@@ -78,7 +78,7 @@ func TestMain(m *testing.M) {
 	}
 
 	testRepo = repository.PostgresRepository{
-		&repository.CompanyRepository{testDB},
+		CompanyRepository: &repository.CompanyRepository{DB: testDB},
 	}
 
 	companyService = services.NewCompanyService(testRepo.CompanyRepository)
