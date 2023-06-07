@@ -42,23 +42,40 @@ make test-integration
 
 While the application is running, we can make requests to get, add, update and remove companies.
 
-*   Get Company (GET) to `localhost:8000/companies/{id}`
+Get Company (GET) to `localhost:8000/companies/{id}`
 
-*   Create Company (POST) to `localhost:8000/companies` with request body:
+Create, Update and Delete routes are protected with jwt-authorization. Therefor, the following HTTP Headers must be included to the requests:
 
-    ```
-    {
-        "name": "",
-        "currency": "EUR"
-    }
-    ```
+```json
+    "Authorization" : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlBldHJvcyBUcmFrYWRhcyIsImlhdCI6MTUxNjIzOTAyMn0.qSUO5wUFgkrvp5C96R_LSMy6tkTVGYQ74ELMrX4Zeyw"
+```
 
-*   Update Company (PATCH) to `localhost:8000/companies/{id}` with request body:
+Create Company (POST) to `localhost:8000/companies` with request body:
 
-    ```
-    {
-        "balance": 15000,
-    }
-    ```
+```json
+{
+    "name": "Petros Inc.",
+    "description": "A short desc of my company",
+    "number_of_employees": 50,
+    "registered": false,
+    "type": "Sole Proprietorship"
+}
+```
 
-*   Delete Company (DELETE) to `localhost:8000/companies/{id}`
+Update Company (PATCH) to `localhost:8000/companies/{id}` with request body:
+
+```json
+{
+    "name": "Petros GmbH.",
+    "number_of_employees": 5,
+    "registered": true,
+    "type": "NonProfit"
+}
+```
+
+Delete Company (DELETE) to `localhost:8000/companies/{id}`
+
+Create, Update and Delete handlers will also produce kafka events that can be monitored in kowl:
+```
+    http://localhost:8080/topics
+```
