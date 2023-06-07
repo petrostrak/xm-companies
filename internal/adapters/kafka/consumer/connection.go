@@ -27,7 +27,9 @@ func (c *Consumer[T]) CreateConnection() {
 		Dialer:    c.dialer,
 	})
 
-	c.reader.SetOffset(0)
+	if err := c.reader.SetOffset(0); err != nil {
+		log.Println(err)
+	}
 }
 
 func (c *Consumer[T]) Read(model T, callback func(T, error)) {
