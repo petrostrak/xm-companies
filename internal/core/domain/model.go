@@ -13,7 +13,7 @@ type Company struct {
 	Type              CompanyType `json:"type"`
 }
 
-type CompanyType int64
+type CompanyType int
 
 const (
 	Corporations CompanyType = iota

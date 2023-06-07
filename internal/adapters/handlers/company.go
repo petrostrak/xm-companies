@@ -31,7 +31,7 @@ func (a *CompanyHandler) CreateCompany(w http.ResponseWriter, r *http.Request) {
 		Description       string `json:"description"`
 		NumberOfEmployees int    `json:"number_of_employees"`
 		Registered        bool   `json:"registered"`
-		Type              int64  `json:"type"`
+		Type              int    `json:"type"`
 	}
 
 	err := utils.ReadJSON(w, r, &input)
@@ -121,7 +121,7 @@ func (a *CompanyHandler) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 		Description       *string `json:"description"`
 		NumberOfEmployees *int    `json:"number_of_employees"`
 		Registered        *bool   `json:"registered"`
-		Type              *int64  `json:"type"`
+		Type              *int    `json:"type"`
 	}
 
 	err = utils.ReadJSON(w, r, &input)
