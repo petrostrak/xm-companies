@@ -122,7 +122,7 @@ func Test_PostgresDBRepoGetCompany(t *testing.T) {
 		t.Errorf("wrong company number of employees returned. expected 4 but got %v", company.NumberOfEmployees)
 	}
 
-	if company.Type != "Sole Proprietorship" {
+	if company.Type.ToString() != "Sole Proprietorship" {
 		t.Errorf("wrong company type returned. expected 'Sole Proprietorship' but got %s", company.Name)
 	}
 }
@@ -133,7 +133,7 @@ func Test_PostgresDBRepoCreateCompany(t *testing.T) {
 		Description:       "A small family firm",
 		NumberOfEmployees: 4,
 		Registered:        true,
-		Type:              "Sole Proprietorship",
+		Type:              domain.SoleProprietorship,
 	}
 
 	err := testRepo.CompanyRepository.Create(&testCompany)
@@ -145,7 +145,7 @@ func Test_PostgresDBRepoCreateCompany(t *testing.T) {
 func Test_PostgresDBRepoUpdateCompany(t *testing.T) {
 	company, _ := testRepo.CompanyRepository.Get(testCompanyID)
 	company.NumberOfEmployees = 6
-	company.Type = "Cooperative"
+	company.Type = domain.Cooperative
 
 	err := testRepo.CompanyRepository.Update(company)
 	if err != nil {
@@ -153,8 +153,8 @@ func Test_PostgresDBRepoUpdateCompany(t *testing.T) {
 	}
 
 	company, _ = testRepo.CompanyRepository.Get(testCompanyID)
-	if company.NumberOfEmployees != 6 || company.Type != "Cooperative" {
-		t.Errorf("expected updated record to have 6 number of employees and Cooperative type, but got %v and %s", company.NumberOfEmployees, company.Type)
+	if company.NumberOfEmployees != 6 || company.Type != domain.Cooperative {
+		t.Errorf("expected updated record to have 6 number of employees and Cooperative type, but got %v and %d", company.NumberOfEmployees, company.Type)
 	}
 }
 

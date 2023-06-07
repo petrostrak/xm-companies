@@ -44,7 +44,7 @@ func (a *CompanyHandler) CreateCompany(w http.ResponseWriter, r *http.Request) {
 		Description:       input.Description,
 		NumberOfEmployees: input.NumberOfEmployees,
 		Registered:        input.Registered,
-		Type:              input.Type,
+		Type:              domain.FromString(input.Type),
 	}
 
 	err = a.service.Create(company)
@@ -94,7 +94,7 @@ func (a *CompanyHandler) GetCompany(w http.ResponseWriter, r *http.Request) {
 	comp.Description = company.Description
 	comp.NumberOfEmployees = company.NumberOfEmployees
 	comp.Registered = company.Registered
-	comp.Type = company.Type
+	comp.Type = company.Type.ToString()
 
 	err = utils.WriteJSON(w, http.StatusOK, utils.Envelope{"Company": comp}, nil)
 	if err != nil {
@@ -141,7 +141,7 @@ func (a *CompanyHandler) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 		company.Registered = *input.Registered
 	}
 	if input.Type != nil {
-		company.Type = *input.Type
+		company.Type = domain.FromString(*input.Type)
 	}
 
 	err = a.service.Update(company)

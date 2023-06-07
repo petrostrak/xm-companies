@@ -4,6 +4,6 @@ CREATE TABLE "companies" (
   "description" varchar(3000) NULL,  
   "number_of_employees" integer NOT NULL,
   "registered" boolean NOT NULL,
-  "type" varchar NOT NULL,
+  "type" integer NOT NULL,
   PRIMARY KEY ("id")  
 );
