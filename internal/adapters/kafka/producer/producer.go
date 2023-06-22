@@ -18,7 +18,7 @@ func GetNewProducer() (*kafka.Producer, error) {
 	return producer, err
 }
 
-func Produce(key []byte, value []byte, method string, topic string, producer *kafka.Producer) {
+func produce(key []byte, value []byte, method string, topic string, producer *kafka.Producer) {
 	deliveryChan := make(chan kafka.Event, 1)
 
 	err := producer.Produce(&kafka.Message{
@@ -52,19 +52,14 @@ func Produce(key []byte, value []byte, method string, topic string, producer *ka
 	close(deliveryChan)
 }
 
-func ProduceCompany(company *domain.Company, method string) error {
-	prod, err := GetNewProducer()
-	if err != nil {
-		return err
-	}
-
+func ProduceCompany(prod *kafka.Producer, company *domain.Company, method string) error {
 	companyTopic := "producer.company"
 
 	data, err := json.Marshal(&company)
 	if err != nil {
 		return err
 	}
-	Produce([]byte(company.ID.String()), data, method, companyTopic, prod)
+	produce([]byte(company.ID.String()), data, method, companyTopic, prod)
 
 	return nil
 }
